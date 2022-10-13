@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:RadioButton label="Radio Button" style="flex-direction: row; align-items: flex-start;" />
+    <ui:Button text="Button" display-tooltip-when-elided="true" usage-hints="None" enable-rich-text="true" name="Button" style="height: 44px; left: 693px; position: relative; visibility: visible; align-items: auto; flex-direction: column; flex-wrap: nowrap; width: 175px; justify-content: flex-start; -unity-text-align: middle-center; white-space: normal; top: 85px; transition-property: all; transition-duration: 0s; transition-timing-function: ease; transition-delay: 0s; overflow: hidden; display: flex; opacity: 1; -unity-font-style: bold; font-size: 35px;" />
+    <ui:GroupBox style="font-size: 20px;" />
+</ui:UXML>
