@@ -11,11 +11,11 @@ public class GameManager : MonoBehaviour
 
     public GameState State;
 
-    public float dayTimer;
     public float nightTimer;
 
     public GameObject dayCanvas;
     public GameObject nightCanvas;
+    public GameObject nightButton;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -31,15 +31,7 @@ public class GameManager : MonoBehaviour
     
     void Update()
     {
-        if(State == GameState.Day && dayTimer < 18)
-        {
-            dayTimer += Time.deltaTime;
-
-            if(dayTimer >= 18)
-            UpdateGameState(GameState.NextNight);
-        }
-
-        else if(State == GameState.Night && nightTimer < 18)
+        if(State == GameState.Night && nightTimer < 18)
         {
             nightTimer += Time.deltaTime;
 
@@ -61,9 +53,6 @@ public class GameManager : MonoBehaviour
             case GameState.Night:
                 HandleNight();
                 break;
-            case GameState.NextNight:
-                HandleNextNight();
-                break;
             default:
                 break;
         }
@@ -73,8 +62,8 @@ public class GameManager : MonoBehaviour
 
     private void HandleDay()
     {
-        statManager.survivedNights++;
-        dayTimer = 0;
+        nightButton.SetActive(true);
+        StatManager.instance.survivedNights++;
         dayCanvas.SetActive(true);
         nightCanvas.SetActive(false);
     }
@@ -82,15 +71,14 @@ public class GameManager : MonoBehaviour
     private void HandleNight()
     {
         Ghost.instance.HandleEveningStats();
-        nightTimer = 0;
+        nightButton.SetActive(false);
         dayCanvas.SetActive(false);
         dayCanvas.SetActive(true);
+        Teleport.instance.PortOut();
+        dayUI.AnnounceNight();
+        nightTimer = 0;
     }
 
-    private void HandleNextNight()
-    {
-        dayUI.confirmNextNight();
-    }
 }
 
 

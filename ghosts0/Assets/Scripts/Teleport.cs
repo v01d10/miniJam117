@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Teleport : MonoBehaviour
 {
+    public static Teleport instance;
+    void Awake() {instance = this;}
     public Transform Basement;
     public Transform Outside;
     public Collider Player;
-
 
     float PortTimer;
 
@@ -29,30 +30,31 @@ public class Teleport : MonoBehaviour
 
             if(CharacterMovement.CanPort && CharacterMovement.outside)
             {
-                print("port in");
-                CharacterMovement.CanPort = false;
-                CharacterMovement.outside = false;
-                Player.transform.position = Basement.position;
+                PortIn();
             }
             
             if(CharacterMovement.CanPort && !CharacterMovement.outside)
             {
-                print("port out");
-                CharacterMovement.CanPort = false;
-                CharacterMovement.outside = true;
-                Player.transform.position = Outside.position;
+                PortOut();
             }         
         }
  
     }
     
-    void PortIn()
+    public void PortIn()
     {
+            print("port in");
+            CharacterMovement.CanPort = false;
+            Player.transform.position = Basement.position;
+            CharacterMovement.outside = false;
 
     }
 
-    void PortOut()
+    public void PortOut()
     {
-
+            print("port out");
+            CharacterMovement.CanPort = false;
+            Player.transform.position = Outside.position;
+            CharacterMovement.outside = true;
     }
 }

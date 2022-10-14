@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: e582165b75473c2438e76c1f0d7a92f9
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Creepy Pumkin
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 730e0b2372295a540b618c30250fc389, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

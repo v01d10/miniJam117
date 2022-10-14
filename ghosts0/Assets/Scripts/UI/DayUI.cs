@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using static StatManager;
 
 public class DayUI : MonoBehaviour
 {
@@ -11,18 +13,18 @@ public class DayUI : MonoBehaviour
     public CharacterMovement CHM;
     public Animator nextNightAnim;
     public GameObject nextNightPanel;
+    public TextMeshProUGUI NightNumber;
 
     void Start()
     {
         CHM = player.GetComponent<CharacterMovement>();
     }
 
-    public void confirmNextNight()
+    public void AnnounceNight()
     {
-        CHM.enabled = !enabled;
         nextNightPanel.SetActive(true);
         nextNightAnim.SetTrigger("Start");
-
+        NightNumber.text = StatManager.instance.survivedNights.ToString();
     }
 
     public void nextNight()

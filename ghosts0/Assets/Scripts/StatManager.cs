@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class StatManager : MonoBehaviour
 {
-    public static StatManager statManager;
-    void Awake() {statManager = this;}
+    public static StatManager instance;
+    void Awake() {instance = this;}
 
     public int survivedNights;
     public int enemiesKilled;

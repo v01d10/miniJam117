@@ -34,9 +34,9 @@ public class DayNightCycle : MonoBehaviour
     void HandleNightLight()
     {
         dirLight.intensity = Mathf.Lerp(1f, 0.3f, 6f);
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
-        RenderSettings.ambientSkyColor = nightColorSky;
-        RenderSettings.ambientEquatorColor = nightColorEquator;
-        RenderSettings.ambientGroundColor = nightColorGround;
+        // RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+        // RenderSettings.ambientSkyColor = nightColorSky;
+        // RenderSettings.ambientEquatorColor = nightColorEquator;
+        // RenderSettings.ambientGroundColor = nightColorGround;
     }
 }
