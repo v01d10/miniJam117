@@ -8,19 +8,25 @@ public class Pellet : MonoBehaviour
 
     public float Damage;
 
+    void Start()
+    {
+        Destroy(gameObject, 3);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Enemy"))
         {
             Enemy hitEnemy = other.GetComponent<Enemy>();
 
-            hitEnemy.Health -= Damage;
+            if(hitEnemy.EnemyHealth > Damage)
+                hitEnemy.DecreaseHealth(Damage);
 
-            if(hitEnemy.Health <= 0)
+            else
             {
-                Destroy(hitEnemy.gameObject);
-                PlayerLevels.instance.Exp += hitEnemy.ExpToGive;
-                gameObject.SetActive(false);
+                hitEnemy.DecreaseHealth(Damage);
+                Destroy(gameObject);
+                StatManager.instance.enemiesKilled++;
             }
         }
     }

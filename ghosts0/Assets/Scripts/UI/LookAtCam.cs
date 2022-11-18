@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class LookAtCam : MonoBehaviour
-{
+{   
+    Camera cam;
+    void Start()
+    {
+       cam = Camera.main;
+    }
     void Update()
     {
-        transform.LookAt(Camera.main.transform, Vector3.forward);
+        transform.LookAt(transform.position + cam.transform.rotation * Vector3.forward, cam.transform.rotation * Vector3.up);
     }
 }

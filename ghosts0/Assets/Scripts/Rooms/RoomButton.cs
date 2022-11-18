@@ -12,7 +12,10 @@ public class RoomButton : MonoBehaviour
 
     public void BuildRoom()
     {
-        Instantiate(RoomManager.instance.RoomPrefabs[roomButtID], Input.mousePosition, RoomsHolder.rotation, RoomsHolder);
+        Instantiate(RoomManager.instance.RoomPrefabs[roomButtID], RoomManager.instance.RoomSlots[RoomManager.instance.selectedSlot].transform.position, RoomManager.instance.RoomSlots[RoomManager.instance.selectedSlot].transform.rotation);
+        Destroy(RoomManager.instance.RoomSlots[RoomManager.instance.selectedSlot].gameObject);
         RoomManager.instance.CloseBuildPanel();
+        RoomManager.instance.selectedSlot = 0;
+        RoomManager.instance.SlotHolder.SetActive(false);
     }
 }

@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class DayNightCycle : MonoBehaviour
 {
-    public Light dirLight;
+    public static DayNightCycle instance;
+    void Awake(){instance = this;}
 
-    public Color nightColorSky;
-    public Color nightColorEquator;
-    public Color nightColorGround;
+    public Light dirLight;
 
     void Update()
     {
@@ -16,27 +15,19 @@ public class DayNightCycle : MonoBehaviour
         {
             HandleDayLight();
         }
-
-        if(GameManager.Instance.State == GameState.Night || !LevelLoader.instance.outside)
-        {
+        else
             HandleNightLight();
 
-        }
     }
 
-    void HandleDayLight()
+    public void HandleDayLight()
     {
-        dirLight.intensity = Mathf.Lerp(0.3f, 1f, 6f);
-        RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Skybox;
+        dirLight.intensity = 0.3f;
 
     }
 
-    void HandleNightLight()
+    public void HandleNightLight()
     {
-        dirLight.intensity = Mathf.Lerp(1f, 0.3f, 6f);
-        // RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
-        // RenderSettings.ambientSkyColor = nightColorSky;
-        // RenderSettings.ambientEquatorColor = nightColorEquator;
-        // RenderSettings.ambientGroundColor = nightColorGround;
+        dirLight.intensity = 0;
     }
 }

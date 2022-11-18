@@ -1,22 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class Shotgun : MonoBehaviour
 {
     public static Shotgun instance;
+
     public int pelletCount;
     public float spreadAngle;
     public float pelletFireVel;
-    private float LifeSpan = 6;
+
     public Transform BarrelExit;
     List<Quaternion> pellets;
-
-[Header("Pelllet Pool")]
-    public List<GameObject> PelletPool = new List<GameObject>();
+    public VisualEffect SmokePoof;
     public GameObject pellet;
-    public int pelletsToPool;
 
+[Header("Reloading")]
+    public float ReloadTime;
+    public float ReloadTimer;
+    public float reloadPerc;
+    public bool Reloading;
+    public float Clip;
+    public Image reloadBar;
+    public GameObject ReloadCanvas;
+
+[Header("Hit")]
+    public GameObject HitColl;
+    bool Hitting;
 
     void Awake()
     {
@@ -26,50 +38,75 @@ public class Shotgun : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1") && !Reloading && !Hitting)
         {
             Fire();
         }
-    }
-
-    void Fire()
-    {
-        GameObject p = new GameObject();
-        for (int i = 0; i < pellets.Count; i++)
+        else if(Input.GetMouseButtonDown(1) && !Reloading && !Hitting)
         {
-            pellets[i] = Random.rotation;
-            p = (GameObject)Instantiate(pellet, BarrelExit.position, BarrelExit.rotation);
-            Destroy(p, LifeSpan);
-            p.transform.rotation = Quaternion.RotateTowards(p.transform.rotation, pellets[i], spreadAngle);
-            p.GetComponent<Rigidbody>().AddForce(p.transform.forward * pelletFireVel);
-            i++;
+            StartCoroutine("Hit");
         }
 
-        // for (int i = 0; i < pelletCount; i++)
-        // {
-        //     GameObject pellet = GetPellet(); 
-        //     if (pellet != null)
-        //     {
-        //         pellet.transform.position = BarrelExit.position;
-        //         pellet.transform.rotation = Random.rotation;
-        //         pellet.SetActive(true);
-        //         pellet.transform.rotation = Quaternion.RotateTowards(pellet.transform.rotation, Random.rotation, spreadAngle);
-        //         pellet.GetComponent<Rigidbody>().AddForce(pellet.transform.forward * pelletFireVel);
-        //     }           
-        // }
+        if(ReloadTimer >= 0)
+        {
+            ReloadTimer -= Time.deltaTime;
+            reloadPerc = ReloadTimer / ReloadTime;
+            reloadBar.fillAmount = reloadPerc;
+        }
 
     }
 
-    public GameObject GetPellet()
+    public void Fire()
     {
-        for (int i = 0; i < pelletsToPool; i++)
-        {
-            if(!PelletPool[i].activeInHierarchy)
+            if(Clip >= 1)
             {
-                return(PelletPool[i]);
-            }
-        }
+                ResourceManager.instance.Bullets -= 1;
+                Clip -= 1;
 
-        return null;
+                for (int i = 0; i < pellets.Count; i++)
+                {
+                    GameObject p;
+                    CharacterMovement.instance.animator.SetTrigger("Shot");
+                    pellets[i] = Random.rotation;
+                    p = (GameObject)Instantiate(pellet, BarrelExit.position, BarrelExit.rotation);
+                    p.transform.rotation = Quaternion.RotateTowards(p.transform.rotation, pellets[i], spreadAngle);
+                    p.GetComponent<Rigidbody>().AddForce(p.transform.forward * pelletFireVel);
+                    CamShaker.instance.ShotShake();
+                    SmokePoof.Play();
+                }
+            }
+            else
+                StartCoroutine("Reload");
+    }
+
+    public IEnumerator Hit()
+    {
+        CharacterMovement.instance.animator.SetTrigger("Hit");
+        Hitting = true;
+        HitColl.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        HitColl.SetActive(false);
+        Hitting=false;
+        yield return null;
+    }
+
+    public IEnumerator Reload()
+    {
+        if(ResourceManager.instance.Bullets >= 2)
+        {
+            Clip = 0;
+            Reloading = true;
+            ReloadTimer = ReloadTime;
+            ReloadCanvas.SetActive(true);
+
+            yield return new WaitForSeconds(ReloadTime);
+
+            ReloadCanvas.SetActive(false);
+            Reloading = false;
+            Clip = 2;
+            yield return null;
+        }
+        else
+            yield return null;
     }
 }

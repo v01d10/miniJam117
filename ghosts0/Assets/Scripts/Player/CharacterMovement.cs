@@ -5,9 +5,12 @@ using UnityEngine.Animations;
 
 public class CharacterMovement : MonoBehaviour
 {
+    public static CharacterMovement instance;
+    void Awake(){instance = this;}
+
     Rigidbody rb;
-    Animator animator;
-    public float speed = 4;
+    public Animator animator;
+    public float speed;
 
     Vector3 lookPos;
 
@@ -51,9 +54,11 @@ public class CharacterMovement : MonoBehaviour
         else if(GameManager.Instance.State == GameState.Night)
         {
             AnimatePlayerNight();
+        }
 
-            if(Input.GetMouseButtonDown(0))
-                animator.SetTrigger("PlayerShot");
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            rb.AddForce(transform.forward * (speed*10), ForceMode.Force);
         }
     }
 

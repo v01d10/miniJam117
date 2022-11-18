@@ -4,32 +4,39 @@ using UnityEngine;
 
 public class GhostManager : MonoBehaviour
 {
-    public static GhostManager gManager;
-    void Awake() {gManager = this;}
+    public static GhostManager instance;
+    void Awake() {instance = this;}
 
     public List<Ghost> allGhosts = new List<Ghost>();
+    public List<Ghost> freeGhosts = new List<Ghost>();
     public List<Ghost> sleepingGhosts = new List<Ghost>();
-    public List<Ghost> relaxingGhosts = new List<Ghost>();
-    public List<Ghost> trainingGhosts = new List<Ghost>();
-
-    public GameObject GhostPrefab;
-    public Transform GhostSpawn;
+    public List<Ghost> workingGhosts = new List<Ghost>();
+    public List<Ghost> leavingGosts = new List<Ghost>();
+    public List<Ghost> milkingGosts = new List<Ghost>();
 
     void Start()
+    {
+        Invoke("HandleGhostID", 1);
+    }
+
+    public void HandleGhostID()
     {
         for (int i = 0; i < allGhosts.Count; i++) allGhosts[i].gID = i;
     }
 
-    void Update()
+    public void HandleGhostProd()
     {
-        if(Input.GetKeyDown(KeyCode.K))
+        for (int i = 0; i < milkingGosts.Count; i++)
         {
-            SpawnGhost();
-        }   
-    }
+            milkingGosts[i].gEctoplasmLevel -= EctoMilk.instance.ProductionRate;
+            ResourceManager.instance.Ectoplasm += milkingGosts[i].gEctoplasmToGive;
+        }
 
-    public void SpawnGhost()
-    {
-        Instantiate(GhostPrefab, GhostSpawn, this.transform);
+        for (int i = 0; i < workingGhosts.Count; i++)
+        {
+            ResourceManager.instance.Ectoplasm -= BulletFac.instance.ProductionRate;
+            ResourceManager.instance.Bullets += BulletFac.instance.ProductionRate;
+
+        }
     }
 }

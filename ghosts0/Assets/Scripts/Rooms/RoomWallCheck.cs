@@ -4,25 +4,17 @@ using UnityEngine;
 
 public class RoomWallCheck : MonoBehaviour
 {
-    RaycastHit hit;
-    Collider Wall;
-    public float MaxDistance = 1.5f;
+    public Collider Wall;
 
-    void Start()
+    void OnTriggerEnter(Collider other)
     {
-        Wall = gameObject.GetComponent<Collider>();
-    }
-
-    void Update()
-    {
-        if(Physics.Raycast(transform.position, Vector3.forward, out hit, MaxDistance))
+        if(other.CompareTag("Wall") && Wall.enabled)
         {
-            if(hit.collider.CompareTag("Wall") && Wall.enabled)
-            {
-                print("hit wall");
-                hit.collider.enabled = !enabled;
-                Wall.enabled = !enabled;
-            }
+            GameObject wall = transform.parent.gameObject;
+            //Collider oppositeWall = other.GetComponentInParent<Collider>();
+            print("hit wall");
+            other.gameObject.SetActive(false);
+            wall.SetActive(false);
         }
     }
 }

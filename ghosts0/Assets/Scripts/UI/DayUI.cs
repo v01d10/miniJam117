@@ -7,17 +7,42 @@ using static StatManager;
 
 public class DayUI : MonoBehaviour
 {
-    public static DayUI dayUI;
-    void Awake() {dayUI = this;}
+    public static DayUI instance;
+    void Awake() {instance = this;}
+
     public GameObject player;
     public CharacterMovement CHM;
     public Animator nextNightAnim;
     public GameObject nextNightPanel;
     public TextMeshProUGUI NightNumber;
 
+    public GameObject NightButton;
+    public GameObject BuildButton;
+    public GameObject StatButton;
+
     void Start()
     {
         CHM = player.GetComponent<CharacterMovement>();
+    }
+
+    public void Scareventure()
+    {
+        if(GhostManager.instance.allGhosts.Count > 0)
+            Scareventures.instance.OpenScareventurePanel();
+    }
+
+    public void nextNight()
+    {
+        nextNightPanel.SetActive(false);
+        GameManager.Instance.UpdateGameState(GameState.Night);
+        CHM.enabled = enabled;
+        AnnounceNight();
+        EnemySpawner.instance.GenerateWave();
+    }
+
+    public void NextNightConfirm()
+    {
+
     }
 
     public void AnnounceNight()
@@ -27,10 +52,5 @@ public class DayUI : MonoBehaviour
         NightNumber.text = StatManager.instance.survivedNights.ToString();
     }
 
-    public void nextNight()
-    {
-        nextNightPanel.SetActive(false);
-        GameManager.Instance.UpdateGameState(GameState.Night);
-        CHM.enabled = enabled;
-    }
+
 }
